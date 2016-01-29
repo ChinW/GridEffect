@@ -1,0 +1,29 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+
+@import "compass/reset";
+
+body{
+	margin:20px;
+	border:1px solid #333;
+}
+#c{
+	// border:1px solid #333;
+	// display: block;
+	// margin:auto;
+}
+#pos {
+  position: absolute;
+}
+
+#note {
+  position: absolute;
+  top:20px;
+  left:20px;
+  padding: 10px;
+  color: #fff;
+  background: #2869FF;
+
+}
