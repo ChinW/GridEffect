@@ -42,8 +42,11 @@ var canvas
 	, once = 10000
 	, random = {
 		r: 0, 
+		r_direction: 1,
 		g: 0,
-		b: 0
+		g_direction: 1,
+		b: 0,
+		b_direction: 1
 	}
 	;
 
@@ -319,9 +322,17 @@ Wave.prototype.draw = function(){
 
 	i = this.points.length
 	if(bufferCount  == 0){
-		random.r  = (random.r + 1 )% 135 
-		random.g  = (random.g + 1 )% 185
-		random.b  = (random.b + 1 )% 185 
+		if((random.r + random.r_direction )% 135  == 0)
+			random.r_direction = -random.r_direction
+		random.r  = (random.r + random.r_direction )% 135
+
+		if((random.g + random.g_direction )% 185  == 0)
+			random.g_direction = -random.g_direction
+		random.g  = (random.g + random.g_direction )% 185
+
+		if((random.b + random.b_direction )% 185  == 0)
+			random.b_direction = -random.b_direction
+		random.b  = (random.b + random.b_direction )% 185 
 	}
 	// debugger
 	while(i--){
