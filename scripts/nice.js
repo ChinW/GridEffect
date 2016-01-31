@@ -14,6 +14,12 @@ window.requestAnimFrame =
 		window.setTimeout(callback, 1000/60);
 	};
 
+window.cancelAnimFrame = 
+	window.cancelAnimationFrame ||
+	window.webkitCancelAnimationFrame ||
+	window.mozCancelAnimationFrame ||
+	window.msCancelAnimationFrame;
+
 ;(function(mouse){
 
 // Canvas Setting

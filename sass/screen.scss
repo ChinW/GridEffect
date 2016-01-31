@@ -91,6 +91,10 @@ body{
         border-radius: 50%;
         // border: 1px solid #000;
         box-shadow: 0 0 10px rgba(0,0,0,.5);
+        transform: rotate(0deg);
+        transition: all 2s;
+      }
+      img.start{
         animation: infinite_rotate 30s linear 0s infinite normal running;
       }
       .player_cover_pivot{
@@ -112,11 +116,12 @@ body{
         position:absolute;
         bottom:0;
         width:20px;
-        height: 20px;
+        height: 0px;
         background: $player_background;
         display: inline;
         float: left;
         z-index: 13;
+        // transition: all .02s;
       }
       @for $i from 1 through 15 {
         .spectrum:nth-child(#{$i}){

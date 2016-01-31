@@ -2,10 +2,13 @@
 
 	var player
 		, audioContext
+		, audioBufferSourceNode
 		, file
 		, note
 		, previousValue = 0
 		, spectrums = document.getElementsByClassName("spectrum")
+		, status = true
+		, animationId = 0
 		;
 
 
@@ -42,12 +45,12 @@
 		// player.play();
 		window.AudioContext = window.AudioContext || window.webkitAudioContext ||
 			window.mozAudioContext || window.msAudioContext;
-		// try{
+		try{
 			audioContext = new AudioContext()
 			_addPlayerListener()
-		// } catch (e){
-			// console.error("Your browser does not support AudioContext");
-		// } 
+		} catch (e){
+			console.error("Sorry, the browser does not support AudioContext, please try it in Chrome");
+		} 
 
 	}
 
@@ -64,8 +67,9 @@
 	}
 
 	function _visualize(buffer){
-		var audioBufferSourceNode = audioContext.createBufferSource()
-			, analyser = audioContext.createAnalyser()
+		audioBufferSourceNode = audioContext.createBufferSource()
+		
+		var  analyser = audioContext.createAnalyser()
 
 		audioBufferSourceNode.connect(analyser)
 
@@ -77,7 +81,10 @@
 
 			audioBufferSourceNode.stop = audioBufferSourceNode.noteOff
 		}
-
+		audioBufferSourceNode.onended = function(){
+			console.log("Ended")
+			status = false
+		}
 		audioBufferSourceNode.start(0)
 
 		analyserMonitor(analyser)
@@ -90,10 +97,28 @@
 		var interval = Math.floor(analyser.frequencyBinCount / spectrums_size)
 
 		var monitorAudioFrequency = function(){
-			var array = new Uint8Array(analyser.frequencyBinCount)
-			analyser.getByteFrequencyData(array)
-			var value = array[20]
-			note.innerHTML = value
+			if(status === false){
+				for(var i=0; i< spectrums_size; i++){
+					spectrums[i].style.height = "0px"
+				}
+
+				document.getElementById("player_cover_img").style.animationPlayState = "paused"
+				audioBufferSourceNode.stop()
+				mouse.down = false
+				cancelAnimFrame(animationId)
+				// var allCapsReachBottom = true;
+
+	   //          for (var i = capYPositionArray.length - 1; i >= 0; i--) {
+	   //              allCapsReachBottom = allCapsReachBottom && (capYPositionArray[i] === 0);
+	   //          };
+
+				return;
+			}
+			var dataArray = new Uint8Array(analyser.frequencyBinCount)
+			analyser.getByteFrequencyData(dataArray)
+
+			var value = dataArray[20]
+
 			if(value > previousValue){
 				mouse.down = true
 			}
@@ -102,13 +127,13 @@
 			}
 
 			for(var i=0; i< spectrums_size; i++){
-				spectrums[i].style.height = array[i*interval] + "px"
+				spectrums[i].style.height = dataArray[i*interval] + "px"
 			}
 
 			previousValue = value
-			requestAnimFrame(monitorAudioFrequency)
+			animationId = requestAnimFrame(monitorAudioFrequency)
 		}
-		requestAnimFrame(monitorAudioFrequency)
+		animationId = requestAnimFrame(monitorAudioFrequency)
 		// debugger
 	}
 
@@ -116,6 +141,12 @@
 		player = document.getElementById("player");
 
 		note = document.getElementById("note")
+
+		var musicToggle = document.getElementById("music_toggle")
+
+		musicToggle.addEventListener("click",function(){
+			status = false
+		})
 		// var f = new File(blob, "../resource/music.mp3")
 
 		// player.addEventListener("change", function(){
@@ -125,6 +156,7 @@
 
 		// console.log(player.files[0])
 		// spectrums[0].style.height =  "50px"
+		// 
 		_player_start();
 	}
 
