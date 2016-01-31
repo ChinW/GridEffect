@@ -17,7 +17,7 @@ var gulp = require("gulp"),
 
 var src = "./", //开发根目录
 	src_css = src + "sass", //开发目录下的sass目录
-	src_image = src + "images", //开发目录下的图片目录
+	src_image = "images", //开发目录下的图片目录
 	src_scripts = src + "scripts",//开发目录下的脚本目录
 	dest = "./dist/", //生产根目录
 	dest_css = dest + "css",  // 生产目录下的css目录
@@ -27,14 +27,16 @@ var src = "./", //开发根目录
 gulp.task("default",["clean"],function(){
 	gulp.start("compass","cssmin","imagemin");
 });
+
 //清理生产环境下的css,images
 gulp.task("clean",function(){
 	return gulp.src([dest_css,dest_scripts],{read:false}).pipe(clean());
 });
+
 //压缩图片
 gulp.task("imagemin",function(){
 	gulp.src(src_image+'/**/*')
-	.pipe(cache(imagemin({
+	.pipe((imagemin({
 		optimizationLevel:5,//类型：Number  默认：3  取值范围：0-7（优化等级）
 		progressive:true,//类型：Boolean 默认：false 无损压缩jpg图片
 		interlaced:true,//类型：Boolean 默认：false 隔行扫描gif进行渲染
@@ -44,6 +46,7 @@ gulp.task("imagemin",function(){
 	//.pipe(connect.reload())
 	.pipe(notify({message:"Images complete"}));
 });
+
 //脚本的校验,压缩,合并
 gulp.task("scripts",function(){
 	gulp.src(src_scripts+"/**/*.js")
@@ -55,12 +58,14 @@ gulp.task("scripts",function(){
 	.pipe(connect.reload())
 	.pipe(notify({message:"scripts complete"}));
 });
+
 gulp.task("build-scripts",function(){
 	gulp.src(dest_scripts+"/**/*.js")
 	.pipe(uglify())
 	.pipe(gulp.dest(dest_scripts))
 	.pipe(notify({message:"build-scripts complete"}));
 });
+
 //compass
 gulp.task("compass",function(){
 	gulp.src(src_css+"/*.scss")
@@ -74,8 +79,12 @@ gulp.task("compass",function(){
 	.pipe(rename({suffix:".min"}))
 	.pipe(gulp.dest(dest_css))
 	.pipe(connect.reload())
-	.pipe(notify({message:"Compass complete"}));
+	.pipe(notify({message:"Compass complete"}))
+	.on("error", function(){
+
+	});
 });
+
 //给生产环境添加前缀
 gulp.task("autoprefixer",function(){
 	gulp.src(dest_css+"/**/*.css")
@@ -83,6 +92,7 @@ gulp.task("autoprefixer",function(){
 	.pipe(gulp.dest(dest_css))
 	.pipe(notify({message:"autoprefixer complete"}));
 });
+
 //css minify css压缩
 gulp.task("cssmin",function(){
 	gulp.src(dest_css+"/*.css")
@@ -90,10 +100,17 @@ gulp.task("cssmin",function(){
 	.pipe(gulp.dest(dest_css))
 	.pipe(notify({message:"css minify ended"}));
 });
+
 //build
 gulp.task("release",function(cb){
 	gulpSequence("clean","compass","cssmin","scripts","build-scripts","imagemin")(cb);
 });
+
+//Clear cache
+gulp.task("clearcache",function(done){
+	return cache.clearAll(done);
+})
+
 //connect
 gulp.task('connect', function() {
   connect.server({
@@ -101,6 +118,7 @@ gulp.task('connect', function() {
     livereload: true
   });
 });
+
 //watch
 gulp.task("watch",function(){
 	//watch sass
@@ -110,5 +128,8 @@ gulp.task("watch",function(){
 	//scripts
 	gulp.watch(src_scripts+"/**/*.js",["scripts"]);
 });
+
+
+
 //connect and watch task
 gulp.task("quickdev",["connect","watch"]);

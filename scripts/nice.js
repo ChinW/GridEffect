@@ -1,6 +1,10 @@
-;(function(){
-	
-	window.requestAnimFrame = 
+var mouse = {
+	x: 0
+	, y: 0
+	, down: false
+}
+
+window.requestAnimFrame = 
 	window.requestAnimationFrame ||
 	window.webkitRequestAnimationFrame ||
 	window.mozRequestAnimationFrame ||
@@ -8,18 +12,20 @@
 	window.msRequestAnimationFrame ||
 	function (callback) {
 		window.setTimeout(callback, 1000/60);
-};
+	};
+
+;(function(mouse){
 
 // Canvas Setting
 var canvas
 	, ctx
-	, width = 30
-	, height = 30
+	, width = 47
+	, height = 15	
 	, product = (width+1)*(height+1)
 	, center = parseInt(product / 2)
-	, interval = 20
+	, interval = 30
 	, waveConfig = {
-		influence: 31
+		influence: 44
 		, spreadSpeed : function(x){
 			if(x == 0)
 				return 2
@@ -32,11 +38,6 @@ var canvas
 	, endX
 	, endY
 	, delay = 0
-	, mouse = {
-		x: 0
-		, y: 0
-		, down: false
-	}
 	, bufferCount = 0
 	, once = 10000
 	, random = {
@@ -318,14 +319,14 @@ Wave.prototype.draw = function(){
 
 	i = this.points.length
 	if(bufferCount  == 0){
-		random.r  = (random.r +1)%105
-		random.g  = (random.g +1)%175
-		random.b  = (random.b +1)%155
+		random.r  = (random.r + 1 )% 135 
+		random.g  = (random.g + 1 )% 185
+		random.b  = (random.b + 1 )% 185 
 	}
 	// debugger
 	while(i--){
 		ctx.beginPath()
-		ctx.fillStyle = "RGBA("+((random.r+Math.abs(i-center)* 10 /height))+", "+((random.g+Math.abs(i-center)* 14 /height))+",  "+((random.b+Math.abs(i-center)* 120 /height))+", 1)"
+		ctx.fillStyle = "RGBA("+((random.r+Math.abs(i-center) /height))+", "+((random.g+Math.abs(i-center)*10 /height))+",  "+((random.b+Math.abs(i-center)* 8 /height))+", 1)"
 		// console.log("RGBA("+((10+Math.abs(i-center)*98/product))+", "+((98+Math.abs(i-center)*209/product))+",  "+((120+Math.abs(i-center)/product))+", 0.7)")
 		
 			// debugger;
@@ -339,14 +340,14 @@ Wave.prototype.draw = function(){
 
 
 	// Draw Drops
-	i = this.drops.length
-	ctx.fillStyle = "red"
-	while(i--){
-		ctx.moveTo(this.drops[i].x, this.drops[i].y)
-		ctx.arc(this.drops[i].x, this.drops[i].y,3,0, Math.PI*2,true)
+	// i = this.drops.length
+	// ctx.fillStyle = "red"
+	// while(i--){
+		// ctx.moveTo(this.drops[i].x, this.drops[i].y)
+		// ctx.arc(this.drops[i].x, this.drops[i].y,3,0, Math.PI*2,true)
 		// ctx.lineTo(this.drops[i].x, this.drops[i].y)
-	}
-	ctx.fill()
+	// }
+	// ctx.fill()
 }
 
 function update(){
@@ -361,11 +362,11 @@ function update(){
 		console.log("Droped",mouse.x, mouse.y)
 		// waves.drop(mouse.x, mouse.y)
 	}
-	if(once > 0){
+	// if(once > 0){
 		waves.update()
-		once--
-	}
-	bufferCount = (bufferCount + 1)%5
+		// once--
+	// }
+	bufferCount = (bufferCount + 1)% 5
 	waves.draw()
 
 	requestAnimFrame(update)
@@ -373,27 +374,27 @@ function update(){
 
 function start(){
 	startX = window.innerWidth/2 - (width*interval)/2 
-	startY = 20
+	startY = 0
 
 	endX = startX + interval * width
 	endY = startY + interval * height
  	var pos = document.getElementById("pos")
 
-	canvas.onmousedown = function(e){
-		mouse.down = true
+	// canvas.onmousedown = function(e){
+	// 	mouse.down = true
 		// mouse.x = e.layerX
 		// mouse.y = e.layerY
-	}
+	// }
 
-    canvas.onmouseup = function(e){
-    	mouse.down = false
-    }
+    // canvas.onmouseup = function(e){
+    // 	mouse.down = false
+    // }
 
-    window.onkeydown = function(e){
-    	if(e.keyCode == 13){
-    		once++
-    	}
-    }
+    // window.onkeydown = function(e){
+    // 	if(e.keyCode == 13){
+    // 		once++
+    // 	}
+    // }
 
 	waves = new Wave()
 	for(var y = 0; y <= height; y++){
@@ -407,9 +408,9 @@ function start(){
 		}
 	}
 
-	random.r = getRandomInt(0,20)
-	random.g = getRandomInt(70,100)
-	random.b = getRandomInt(100,120)
+	random.r = getRandomInt(10, 135)
+	random.g = getRandomInt(70,185)
+	random.b = getRandomInt(100,185)
 
 	console.log(center)
 
@@ -421,14 +422,22 @@ function start(){
 function load(){
 	canvas = document.getElementById("c");
 
-	canvas.width = window.innerWidth -40;
-	canvas.height = window.innerHeight -40;
+	canvas.width = window.innerWidth ;
+	canvas.height = window.innerHeight ;
+
+	width = Math.ceil(canvas.width / interval)
+	height = Math.ceil(canvas.height / interval)
+	product = (width)*(height)
+	center = parseInt(product / 2)
+	// console.log(width, height)
 
 	ctx = canvas.getContext("2d");
 	if(ctx == false){
 		alert("cannot get canvas context");
 	}
+
+	start()
 }
 
 window.addEventListener("load",load);
-})()
+})(mouse)

@@ -9,11 +9,27 @@
 	<div id="note">
 		Click the canvas.
 	</div>
-	<audio id="player" src="./resource/Annabelle.mp3" ></audio>
+	<div class="player" id="player">
+		<div class="player_header">
+			<h3 class="player_title">Annabelle
+			</h3>
+			<p class="player_author">PianoBoy</p>
+		</div>
+		<div class="player_box">
+			<div class="player_cover">
+				<img src="./images/pianoboy.jpg" alt="">
+				<!-- <span class="player_cover_pivot"></span> -->
+			</div>
+			<div class="player_spectrum">
+				<div class="spectrum"></div><div class="spectrum"></div><div class="spectrum"></div><div class="spectrum"></div><div class="spectrum"></div><div class="spectrum"></div><div class="spectrum"></div><div class="spectrum"></div><div class="spectrum"></div><div class="spectrum"></div><div class="spectrum"></div><div class="spectrum"></div><div class="spectrum"></div><div class="spectrum"></div><div class="spectrum"></div>
+			</div>
+		</div>
+		<div class="player_controller">
+			<a class="pe-7s-play player_play pe-3-5x" ></a>
+		</div>
+	</div>
 	<canvas id="c"></canvas>
-	<div id="pos">
-    	1232
-    </div>
+	<div id="pos"></div>
 	<script src="./scripts/all.min.js"></script>
 </body>
 </html>
