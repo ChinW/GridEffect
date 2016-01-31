@@ -24,3 +24,5 @@ When mouse down, the wave heppens.
 ![Wave3](http://7xngrd.com1.z0.glb.clouddn.com/ci_wave3.gif)
 
 ![Wave4](http://7xngrd.com1.z0.glb.clouddn.com/ci_wave4.gif)
+
+![Wave4](http://7xngrd.com1.z0.glb.clouddn.com/ci_visulizer_player.gif)
