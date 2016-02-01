@@ -37,6 +37,8 @@
 	getFileObject('resource/Annabelle.mp3', function (fileObject) {
 	     console.log(fileObject);
 	     file = fileObject
+	     note = document.getElementById("note")
+	     note.innerHTML = "Player Start"
 	     load()
 	}); 
 
@@ -50,6 +52,7 @@
 			_addPlayerListener()
 		} catch (e){
 			console.error("Sorry, the browser does not support AudioContext, please try it in Chrome");
+			note.innerHTML = "Sorry, the browser does not support AudioContext, please try it in Chrome"
 		} 
 
 	}
@@ -139,8 +142,6 @@
 
 	function load(){
 		player = document.getElementById("player");
-
-		note = document.getElementById("note")
 
 		var musicToggle = document.getElementById("music_toggle")
 
