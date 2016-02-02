@@ -1122,7 +1122,7 @@ body {
   position: absolute;
 }
 
-#note {
+.note {
   position: absolute;
   top: 0px;
   left: 0px;
@@ -1130,6 +1130,17 @@ body {
   color: #fff;
   background: #2869FF;
   z-index: 20;
+}
+.note .label_file_saver {
+  display: none;
+  border: 1px solid #fff;
+  padding: 10px 0;
+  width: 100%;
+  font-size: 1.25em;
+  text-align: center;
+}
+.note .label_file_saver input[type="file"] {
+  display: none;
 }
 
 .player {
